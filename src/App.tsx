@@ -1,35 +1,52 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { productList } from "./components/data";
+import ProductCard from "./components/ProductCard";
+import Modal from "./components/ui/Modal";
+import Button from "./components/ui/Button";
 
-function App() {
-  const [count, setCount] = useState(0);
+const App = () => {
+  //State
+  const [isOpen, setIsOpen] = useState(false);
 
+  //Handler
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  //Render Product
+  const renderProductList = productList.map((product) => (
+    <ProductCard key={product.id} product={product} />
+  ));
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main className="container">
+      <Button
+        width="w-full"
+        className="bg-indigo-600 hover:bg-indigo-800"
+        onClick={() => {
+          openModal();
+        }}
+      >
+        Add
+      </Button>
+      <div className=" m-5 p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-3 rounded-md ">
+        {renderProductList}
       </div>
-      <h1 className="text-3xl font-bold underline">Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <Modal isOpen={isOpen} closeModal={closeModal} title="Add a New Product">
+        <div className="flex items-center space-x-3">
+          <Button width="w-full" className="bg-indigo-600 hover:bg-indigo-800">
+            Submit
+          </Button>
+          <Button width="w-full" className="bg-gray-400 hover:bg-gray-800">
+            Cancel
+          </Button>
+        </div>
+      </Modal>
+    </main>
   );
-}
+};
 
 export default App;
